@@ -112,7 +112,7 @@ class Menu():
         print("mostrarV")
         padre.place_forget()
         padre.place(relwidth=0.68, relheight=1,relx=0.16,rely=0)
-        frameDesechable = tk.Frame(padre)
+        frameDesechable = tk.Frame(padre, bg="orange")
         frameDesechable.place(relwidth=1, relheight=1,relx=0,rely=0)
         mostrar = ventanas.Mostrar(frameDesechable)
 
