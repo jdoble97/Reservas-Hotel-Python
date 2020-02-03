@@ -2,6 +2,8 @@ import tkinter as tk
 import GraficosContenido as ventanas
 import time
 
+reservasGlobales = []
+
 class Aplicacion():
     def __init__(self):
         self.root = tk.Tk()
@@ -42,21 +44,21 @@ class Cuerpo():
 class Menu():
     def __init__(self, padre, contenido):
         #Boton insertar
-        self.insertarB = tk.Button(padre, text="Insertar", command=lambda:self.insertarV(contenido), height = 5, width = 15, background="#8e99f3")
+        self.insertarB = tk.Button(padre, text="Insertar", command=lambda:self.insertarV(contenido,reservasGlobales), height = 5, width = 15, background="#8e99f3")
         self.insertarB["border"] = "2"
         self.insertarB.bind("<Enter>", lambda e:self.hover(self.insertarB))
         self.insertarB.bind("<Leave>", lambda e:self.unHover(self.insertarB))
         self.insertarB.place(relwidth=0.8, relheight=0.13,relx=0.1,rely=0.04)
 
-        #Boton eliminar
-        self.eliminarB = tk.Button(padre, text="Mostrar", command=lambda:self.mostrarV(contenido), height = 5, width = 15, background="#8e99f3")
+        #Boton mostrar
+        self.eliminarB = tk.Button(padre, text="Mostrar", command=lambda:self.mostrarV(contenido, reservasGlobales), height = 5, width = 15, background="#8e99f3")
         self.eliminarB["border"] = "2"
         self.eliminarB.bind("<Enter>", lambda e:self.hover(self.eliminarB))
         self.eliminarB.bind("<Leave>", lambda e:self.unHover(self.eliminarB))
         self.eliminarB.place(relwidth=0.8, relheight=0.13,relx=0.1,rely=0.20)
 
-        #Boton consultar
-        self.consultarB = tk.Button(padre, text="Eliminar", command=quit, height = 5, width = 15, background="#8e99f3")
+        #Boton eliminar
+        self.consultarB = tk.Button(padre, text="Eliminar", command=lambda:self.eliminarV(contenido), height = 5, width = 15, background="#8e99f3")
         self.consultarB["border"] = "2"
         self.consultarB.bind("<Enter>", lambda e:self.hover(self.consultarB))
         self.consultarB.bind("<Leave>", lambda e:self.unHover(self.consultarB))
@@ -101,19 +103,29 @@ class Menu():
         cancelar = tk.Button(confirmar, text="Cancelar", command = lambda:confirmar.destroy(),bg="green")
 
         cancelar.place(relwidth=0.5, relheight=0.5, relx=0.5,rely=0.5)
-    def insertarV(self,padre):
+    def insertarV(self,padre, listaReservasG):
         padre.place_forget()
         padre.place(relwidth=0.68, relheight=1,relx=0.16,rely=0)
         frameDesechable = tk.Frame(padre)
         frameDesechable.place(relwidth=1, relheight=1, relx=0,rely=0)
-        insercion = ventanas.Insertar(padre)
+        insercion = ventanas.Insertar(padre, listaReservasG)
 
-    def mostrarV(self, padre):
+    def mostrarV(self, padre, listaReservasG):
         print("mostrarV")
         padre.place_forget()
         padre.place(relwidth=0.68, relheight=1,relx=0.16,rely=0)
         frameDesechable = tk.Frame(padre, bg="orange")
         frameDesechable.place(relwidth=1, relheight=1,relx=0,rely=0)
-        mostrar = ventanas.Mostrar(frameDesechable)
+        mostrar = ventanas.Mostrar(frameDesechable, listaReservasG)
+
+    def eliminarV(self, padre):
+        print("eliminarV")
+        padre.place_forget()
+        padre.place(relwidth=0.68, relheight=1,relx=0.16,rely=0)
+        frameDesechable = tk.Frame(padre, bg="orange")
+        frameDesechable.place(relwidth=1, relheight=1,relx=0,rely=0)
+        ventanas.Eliminar(frameDesechable)
+
+
 
 app = Aplicacion()
