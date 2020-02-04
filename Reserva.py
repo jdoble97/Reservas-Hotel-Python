@@ -1,3 +1,5 @@
+import json
+
 class Reserva:
     """
     Se ha definido una clase Reserva para simplificar la forma de añadir reservas
@@ -37,3 +39,21 @@ class Reserva:
     def eliminarReservaDeseada(reservaEliminar, listaReservas=[]):
         if reservaEliminar in listaReservas:
             listaReservas.remove(reservaEliminar)
+
+class Fichero:
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def exportar(listaReserva=[]):
+    
+        listaJson = []
+        for elemento in listaReserva:
+            listaJson.append({
+                "id" : elemento.id,
+                "hotel" : elemento.hotel,
+                "city" : elemento.city,
+                "date" : elemento.date,
+                "room" : elemento.room})
+        with open('data.json', 'w') as file:
+            json.dump(listaJson, file, indent=4)

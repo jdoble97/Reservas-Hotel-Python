@@ -144,7 +144,7 @@ class Eliminar:
         self.mostrarReserva.place(relwidth=0.4, relheight=0.1, relx=0.1,rely=0.8)
         self.eliminarReserva = tk.Button(self.frameReservas, text="Eliminar", command=lambda:self.aceptarEliminar(reservasGlobales), state=tk.DISABLED)
         self.eliminarReserva.place(relwidth=0.4, relheight=0.1, relx=0.5,rely=0.8)
-        self.comprobarReservasTam(reservasGlobales)
+        
 
         #Labels para la informacion
         self.idL = tk.Label(padre, text="ID" ,font = "Verdana 25 bold italic", relief="groove")
@@ -157,6 +157,7 @@ class Eliminar:
         self.FechaL.place(relwidth=0.7, relheight=0.2, relx=0.3,rely=0.6)
         self.HabitacionesL = tk.Label(padre, text="Número de Habitaciones", font = "Verdana 25 bold italic", relief="groove")
         self.HabitacionesL.place(relwidth=0.7, relheight=0.2, relx=0.3,rely=0.8)
+        self.comprobarReservasTam(reservasGlobales)
 
     def listarReservas(self, reservasMostrar=[]):
         self.listaReservas.delete(0,tk.END)
@@ -199,6 +200,16 @@ class Eliminar:
         if len(reservasGlobales)==0:
             self.eliminarReserva["state"] = tk.DISABLED
             self.mostrarReserva["state"] = tk.DISABLED
+        else:
+            self.listaReservas.select_set(0)
+            self.eliminarReserva["state"] = tk.DISABLED
+        
+        self.idL["text"]= "ID"
+        self.HotelL["text"] = "Nombre de Hotel"
+        self.CiudadL["text"] = "Ciudad"
+        self.FechaL["text"] = "Fecha"
+        self.HabitacionesL["text"] = "Numero de habitaciones"
+
 
 class Informacion:
     def __init__(self, padre):

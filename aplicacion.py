@@ -1,8 +1,10 @@
 import tkinter as tk
+from tkinter import messagebox
 import GraficosContenido as ventanas
 import time
 import uuid 
 from informacion import info
+from Reserva import Fichero
 
 reservasGlobales = []
 
@@ -67,8 +69,8 @@ class Menu():
         self.consultarB.bind("<Leave>", lambda e:self.unHover(self.consultarB))
         self.consultarB.place(relwidth=0.8, relheight=0.13,relx=0.1,rely=0.36)
 
-        #Boton guardar
-        self.guardarB = tk.Button(padre, text="Importar", command=quit, height = 5, width = 15, background="#8e99f3")
+        #Boton exportar
+        self.guardarB = tk.Button(padre, text="Exportar", command=lambda:self.exportarFichero(reservasGlobales), height = 5, width = 15, background="#8e99f3")
         self.guardarB["border"] = "2"
         self.guardarB.bind("<Enter>", lambda e:self.hover(self.guardarB))
         self.guardarB.bind("<Leave>", lambda e:self.unHover(self.guardarB))
@@ -128,6 +130,13 @@ class Menu():
         frameDesechable = tk.Frame(padre, bg="orange")
         frameDesechable.place(relwidth=1, relheight=1,relx=0,rely=0)
         ventanas.Eliminar(frameDesechable, listaReservasG)
+
+    def exportarFichero(self, listaReservasG):
+        if len(reservasGlobales)==0:
+            messagebox.showerror(message="No hay reservas que exportar", title="Reservas vacías")
+        else:
+            Fichero.exportar(listaReservasG)
+            messagebox.showinfo(message="Se ha exportado las reservas correctamente", title="Guardado correcto")
 
 
 
