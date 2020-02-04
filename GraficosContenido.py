@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import messagebox
 import time
 from Reserva import Reserva
+import uuid
+from informacion import info
 
 
 class Insertar:
@@ -45,6 +47,9 @@ class Insertar:
         self.cancelarB.place(relwidth=0.20, relheight=0.10, relx=0.5,rely=0.85)
 
     def getFecha(self):
+        idForm = str(uuid.uuid1().int)[:20]
+        self.idE.delete(0,tk.END)
+        self.idE.insert(0,idForm)
         self.FechaE.config(state=tk.NORMAL)
         self.FechaE.delete(0,tk.END)
         now = time.strftime("%m/%d/%Y, %H:%M:%S")
@@ -52,9 +57,29 @@ class Insertar:
         self.FechaE.config(state="readonly")
     
     def insertarReservaFormulario(self, listadeReservas=[]):
-        resFormObj = Reserva(self.idE.get(),self.HotelE.get(),self.CiudadE.get(),self.FechaE.get(),
-        self.HabitacionesE.get())
-        listadeReservas.append(resFormObj)
+        
+        
+        datosComprobar = [self.HotelE.get(),self.CiudadE.get(),self.HabitacionesE.get()]
+        if not datosComprobar[0] or not datosComprobar[1] or not datosComprobar[2]:
+            print("Esta vacio")
+            messagebox.showwarning(message="Debes rellenar todos los campos",title="Aviso")
+        else:
+            self.getFecha()
+            resFormObj = Reserva(self.idE.get(),self.HotelE.get(),self.CiudadE.get(),self.FechaE.get(),
+            self.HabitacionesE.get())
+            listadeReservas.append(resFormObj)
+            self.limpiarFormulario()
+            messagebox.showinfo(message="Has rellenado correctamente el formulario",title="Correcto")
+
+
+    
+    def limpiarFormulario(self):
+        self.HotelE.delete(0,tk.END)
+        self.CiudadE.delete(0,tk.END)
+        self.HabitacionesE.delete(0,tk.END)
+        self.getFecha()
+
+        
 #IdReserva, Hotel, Ciudad, Fecha, Habitacciones
 
 class Mostrar:
@@ -63,15 +88,15 @@ class Mostrar:
         self.frameReservas.place(relwidth=0.30, relheight=1, relx=0,rely=0)
         self.listaReservas = tk.Listbox(self.frameReservas, bg="white")
         self.listaReservas.place(relwidth=1, relheight=0.75, relx=0,rely=0)
-        self.listarReservas(reservasGlobales)
+        self.listarReservasF(reservasGlobales)
         self.listaReservas.select_set(0)
         
         #Botones
-        self.mostrarReserva = tk.Button(self.frameReservas, text="Mostrar", command=self.mostrarCaracteristicasReserva)
+        self.mostrarReserva = tk.Button(self.frameReservas, text="Mostrar", command=lambda:self.mostrarCaracteristicasReserva(reservasGlobales))
         self.mostrarReserva.place(relwidth=0.4, relheight=0.1, relx=0.3,rely=0.8)
 
         #Labels para la informacion
-        self.idL = tk.Label(padre, font = "Verdana 25 bold italic", relief="groove")
+        self.idL = tk.Label(padre, text="ID", font = "Verdana 25 bold italic", relief="groove")
         self.idL.place(relwidth=0.7, relheight=0.2, relx=0.3,rely=0)
         self.HotelL = tk.Label(padre, text="Nombre de Hotel", font = "Verdana 25 bold italic", relief="groove")
         self.HotelL.place(relwidth=0.7, relheight=0.2, relx=0.3,rely=0.2)
@@ -84,40 +109,45 @@ class Mostrar:
 
         
 
-    def listarReservas(self, reservasMostrar=[]):
+    def listarReservasF(self, reservasMostrar=[]):
         resumenReserva = []
         for res in reservasMostrar:
             resumenReserva.append(res.datosReserva())
 
         self.listaReservas.insert(0,*resumenReserva)
-    def mostrarCaracteristicasReserva(self):
+    def mostrarCaracteristicasReserva(self, reservasGlobales):
         prueba = self.listaReservas.selection_get()
-        self.idL["text"]= prueba
-        self.HotelL["text"] = prueba
-        self.CiudadL["text"] = prueba
-        self.FechaL["text"] = prueba
-        self.HabitacionesL["text"] = prueba
+        idSeleccionado = prueba.split(" ")[1]
+        print("Esto es: "+idSeleccionado)
+        reservaSeleccionada = Reserva.getReservaDeseada(idSeleccionado, reservasGlobales)
+        detallesReserva = reservaSeleccionada.getInformacionDetallada()
+        self.idL["text"]= detallesReserva[0]
+        self.HotelL["text"] = detallesReserva[1]
+        self.CiudadL["text"] = detallesReserva[2]
+        self.FechaL["text"] = detallesReserva[3]
+        self.HabitacionesL["text"] = detallesReserva[4]
 
         print(prueba)
 
 class Eliminar: 
-    def __init__(self, padre):
+    def __init__(self, padre, reservasGlobales):
         self.reservaQueEliminamos = None
         self.frameReservas = tk.Frame(padre, bg="red")
         self.frameReservas.place(relwidth=0.30, relheight=1, relx=0,rely=0)
         self.listaReservas = tk.Listbox(self.frameReservas, bg="white")
         self.listaReservas.place(relwidth=1, relheight=0.75, relx=0,rely=0)
-        self.listarReservas()
+        self.listarReservas(reservasGlobales)
         self.listaReservas.select_set(0)
         
         #Botones
-        self.mostrarReserva = tk.Button(self.frameReservas, text="Mostrar", command=self.mostrarCaracteristicasReserva)
+        self.mostrarReserva = tk.Button(self.frameReservas, text="Mostrar", command=lambda:self.mostrarCaracteristicasReserva(reservasGlobales))
         self.mostrarReserva.place(relwidth=0.4, relheight=0.1, relx=0.1,rely=0.8)
-        self.eliminarReserva = tk.Button(self.frameReservas, text="Eliminar", command=lambda:self.aceptarEliminar, state=tk.DISABLED)
+        self.eliminarReserva = tk.Button(self.frameReservas, text="Eliminar", command=lambda:self.aceptarEliminar(reservasGlobales), state=tk.DISABLED)
         self.eliminarReserva.place(relwidth=0.4, relheight=0.1, relx=0.5,rely=0.8)
+        self.comprobarReservasTam(reservasGlobales)
 
         #Labels para la informacion
-        self.idL = tk.Label(padre, font = "Verdana 25 bold italic", relief="groove")
+        self.idL = tk.Label(padre, text="ID" ,font = "Verdana 25 bold italic", relief="groove")
         self.idL.place(relwidth=0.7, relheight=0.2, relx=0.3,rely=0)
         self.HotelL = tk.Label(padre, text="Nombre de Hotel", font = "Verdana 25 bold italic", relief="groove")
         self.HotelL.place(relwidth=0.7, relheight=0.2, relx=0.3,rely=0.2)
@@ -128,29 +158,48 @@ class Eliminar:
         self.HabitacionesL = tk.Label(padre, text="Número de Habitaciones", font = "Verdana 25 bold italic", relief="groove")
         self.HabitacionesL.place(relwidth=0.7, relheight=0.2, relx=0.3,rely=0.8)
 
-    def listarReservas(self):
-        items = (
-            "Python",
-            "C",
-            "C++",
-            "Java"
-        )
-        self.listaReservas.insert(0,*items)
+    def listarReservas(self, reservasMostrar=[]):
+        self.listaReservas.delete(0,tk.END)
+        resumenReserva = []
+        for res in reservasMostrar:
+            resumenReserva.append(res.datosReserva())
+
+        self.listaReservas.insert(0,*resumenReserva)
     
     def aceptarEliminar(self, reservasGlobal=[]):
-        respuesta = messagebox.askyesno(message="¿Estás seguro de querer eliminar esta reserva?", title="Seguro de eliminar")
+        if len(reservasGlobal)==0:
+            self.eliminarReserva["state"] = tk.DISABLED
+            self.mostrarReserva["state"] = tk.DISABLED
+        else:
+            print("aceptarEliminar funcion")
+            respuesta = messagebox.askyesno(message="¿Estás seguro de querer eliminar esta reserva?", title="Seguro de eliminar")
         # print(messagebox.askokcancel(message="¿Desea continuar?", title="Título"))
         # print(messagebox.askretrycancel(message="¿Desea reintentar?", title="Título"))
-        if respuesta:
-            #reservasGlobal.remove(self.reservaQueEliminamos)
-            pass
+            if respuesta:
+                Reserva.eliminarReservaDeseada(self.reservaQueEliminamos, reservasGlobal)
+            self.listarReservas(reservasGlobal)
+            self.comprobarReservasTam(reservasGlobal)
     
-    def mostrarCaracteristicasReserva(self):
-        prueba = self.listaReservas.selection_get()
-        self.idL["text"]= prueba
-        self.HotelL["text"] = prueba
-        self.CiudadL["text"] = prueba
-        self.FechaL["text"] = prueba
-        self.HabitacionesL["text"] = prueba
+    def mostrarCaracteristicasReserva(self, reservasGlobales):
         self.eliminarReserva["state"] = tk.ACTIVE
+        prueba = self.listaReservas.selection_get()
+        idSeleccionado = prueba.split(" ")[1]
+        print("Esto es: "+idSeleccionado)
+        reservaSeleccionada = Reserva.getReservaDeseada(idSeleccionado, reservasGlobales)
+        detallesReserva = reservaSeleccionada.getInformacionDetallada()
+        self.idL["text"]= detallesReserva[0]
+        self.HotelL["text"] = detallesReserva[1]
+        self.CiudadL["text"] = detallesReserva[2]
+        self.FechaL["text"] = detallesReserva[3]
+        self.HabitacionesL["text"] = detallesReserva[4]
+        self.reservaQueEliminamos = reservaSeleccionada
         print(prueba)
+
+    def comprobarReservasTam(self, reservasGlobales):
+        if len(reservasGlobales)==0:
+            self.eliminarReserva["state"] = tk.DISABLED
+            self.mostrarReserva["state"] = tk.DISABLED
+
+class Informacion:
+    def __init__(self, padre):
+        

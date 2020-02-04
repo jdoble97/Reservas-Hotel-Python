@@ -1,6 +1,8 @@
 import tkinter as tk
 import GraficosContenido as ventanas
 import time
+import uuid 
+from informacion import info
 
 reservasGlobales = []
 
@@ -37,8 +39,8 @@ class Cuerpo():
         self.menu.place(relwidth=0.16, relheight=1,relx=0,rely=0)
         self.contenido = tk.Frame(self.frame, bg="#FFFFFF")
         self.contenido.place(relwidth=0.68, relheight=1,relx=0.16,rely=0)
-        self.lateralIzq = tk.Frame(self.frame, bg="#FFFFFF", relief="groove", borderwidth=2)
-        self.lateralIzq.place(relwidth=0.16, relheight=1,relx=0.84,rely=0)
+        self.lateralDer = tk.Frame(self.frame, bg="yellow", relief="groove", borderwidth=2)
+        self.lateralDer.place(relwidth=0.16, relheight=1,relx=0.84,rely=0)
         menu = Menu(self.menu, self.contenido)
 
 class Menu():
@@ -58,7 +60,7 @@ class Menu():
         self.eliminarB.place(relwidth=0.8, relheight=0.13,relx=0.1,rely=0.20)
 
         #Boton eliminar
-        self.consultarB = tk.Button(padre, text="Eliminar", command=lambda:self.eliminarV(contenido), height = 5, width = 15, background="#8e99f3")
+        self.consultarB = tk.Button(padre, text="Eliminar", command=lambda:self.eliminarV(contenido, reservasGlobales), height = 5, width = 15, background="#8e99f3")
         self.consultarB["border"] = "2"
         self.consultarB.bind("<Enter>", lambda e:self.hover(self.consultarB))
         self.consultarB.bind("<Leave>", lambda e:self.unHover(self.consultarB))
@@ -118,14 +120,15 @@ class Menu():
         frameDesechable.place(relwidth=1, relheight=1,relx=0,rely=0)
         mostrar = ventanas.Mostrar(frameDesechable, listaReservasG)
 
-    def eliminarV(self, padre):
+    def eliminarV(self, padre, listaReservasG):
         print("eliminarV")
         padre.place_forget()
         padre.place(relwidth=0.68, relheight=1,relx=0.16,rely=0)
         frameDesechable = tk.Frame(padre, bg="orange")
         frameDesechable.place(relwidth=1, relheight=1,relx=0,rely=0)
-        ventanas.Eliminar(frameDesechable)
+        ventanas.Eliminar(frameDesechable, listaReservasG)
 
 
 
 app = Aplicacion()
+print(info)

@@ -15,5 +15,25 @@ class Reserva:
         print("****************************")
     
     def datosReserva(self):
-        datoReserva = "ID: "+self.id+", Hotel: "+self.hotel
+        datoReserva = "ID: "+self.id+" -> Hotel: "+self.hotel
         return datoReserva
+    
+    def getInformacionDetallada(self):
+        detalles = []
+        detalles.append("ID: "+self.id)
+        detalles.append("Hotel: "+self.hotel)
+        detalles.append("Ciudad: "+self.city)
+        detalles.append("Fecha: "+self.date)
+        detalles.append("Habitaciones: "+self.room)
+        return detalles
+    
+    @staticmethod
+    def getReservaDeseada(idReserva, listaReservas=[]):
+        for x in listaReservas:
+            if idReserva==x.id:
+                return x
+    
+    @staticmethod
+    def eliminarReservaDeseada(reservaEliminar, listaReservas=[]):
+        if reservaEliminar in listaReservas:
+            listaReservas.remove(reservaEliminar)
