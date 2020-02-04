@@ -202,4 +202,14 @@ class Eliminar:
 
 class Informacion:
     def __init__(self, padre):
-        
+        self.listaReservas = tk.Listbox(padre, bg="white", font = "Verdana 11 bold italic")
+        self.listaReservas.place(relwidth=1, relheight=1, relx=0,rely=0)
+        self.listaReservas.insert(0,*info)
+        self.horaL = tk.Label(padre,bg="green", font = "Verdana 11 bold italic")
+        self.horaL.place(relwidth=1, relheight=0.2, relx=0,rely=0.8)
+        self.update_clock(padre)
+    
+    def update_clock(self, padre):
+        now = time.strftime("%m/%d/%Y, %H:%M:%S")
+        self.horaL.configure(text=now)
+        padre.after(1000, lambda:self.update_clock(padre))

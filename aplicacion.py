@@ -24,7 +24,7 @@ class Cabecera():
         self.frame.place(relwidth=1, relheight=0.15, relx=0,rely=0)
         self.titulo = tk.Label(self.frame, text="RegiTravel",bg="#3b83bd",font = "Verdana 50 bold italic")
         self.titulo.place(relwidth=1, relheight=1, relx=0,rely=0)
-        self.update_clock()
+        #self.update_clock()
 
     def update_clock(self):
         now = time.strftime("%m/%d/%Y, %H:%M:%S")
@@ -39,8 +39,9 @@ class Cuerpo():
         self.menu.place(relwidth=0.16, relheight=1,relx=0,rely=0)
         self.contenido = tk.Frame(self.frame, bg="#FFFFFF")
         self.contenido.place(relwidth=0.68, relheight=1,relx=0.16,rely=0)
-        self.lateralDer = tk.Frame(self.frame, bg="yellow", relief="groove", borderwidth=2)
+        self.lateralDer = tk.Frame(self.frame, bg="white", relief="groove", borderwidth=2)
         self.lateralDer.place(relwidth=0.16, relheight=1,relx=0.84,rely=0)
+        ventanas.Informacion(self.lateralDer)
         menu = Menu(self.menu, self.contenido)
 
 class Menu():
@@ -131,4 +132,3 @@ class Menu():
 
 
 app = Aplicacion()
-print(info)
