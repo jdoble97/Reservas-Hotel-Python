@@ -10,11 +10,6 @@ class Reserva:
         self.city = ciudad
         self.date = fecha
         self.room = habitaciones
-
-    def toString(self):
-        print("****************************")
-        print("ID:", self.id,"Nombre de hotel: ",self.hotel,"Ciudad:",self.city,"Fecha:",self.date,"Nº habitaciones:",self.room)
-        print("****************************")
     
     def datosReserva(self):
         datoReserva = "ID: "+self.id+" -> Hotel: "+self.hotel
@@ -57,3 +52,18 @@ class Fichero:
                 "room" : elemento.room})
         with open('data.json', 'w') as file:
             json.dump(listaJson, file, indent=4)
+    
+    @staticmethod
+    def cargar(listaReservas):
+        print("Estatico cargar lista")
+        with open('data.json') as json_file:
+            data = json.load(json_file)
+            objetos = []
+            for x in data:
+                atributos = []
+                print(x)
+                for k in x:
+                    atributos.append(x[k])
+                listaReservas.append(Reserva(atributos[0],atributos[1],atributos[2],atributos[3],atributos[4]))
+            for y in objetos:
+                print(type(y))

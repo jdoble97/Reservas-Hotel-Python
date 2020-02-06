@@ -5,6 +5,8 @@ import time
 import uuid 
 from informacion import info
 from Reserva import Fichero
+from Reserva import Reserva
+import json
 
 reservasGlobales = []
 
@@ -77,7 +79,7 @@ class Menu():
         self.guardarB.place(relwidth=0.8, relheight=0.13,relx=0.1,rely=0.52)
 
         #Boton cargar
-        self.cargarB = tk.Button(padre, text="Cargar", command=quit,height = 5, width = 15, background="#8e99f3")
+        self.cargarB = tk.Button(padre, text="Cargar", command=lambda:self.cargarFichero(reservasGlobales),height = 5, width = 15, background="#8e99f3")
         self.cargarB["border"] = "2"
         self.cargarB.bind("<Enter>", lambda e:self.hover(self.cargarB))
         self.cargarB.bind("<Leave>", lambda e:self.unHover(self.cargarB))
@@ -138,6 +140,21 @@ class Menu():
             Fichero.exportar(listaReservasG)
             messagebox.showinfo(message="Se ha exportado las reservas correctamente", title="Guardado correcto")
 
-
+    def cargarFichero(self, listaReservasG):
+        Fichero.cargar(reservasGlobales)
+        print("Intentando cargar")
+        # with open('data.json') as json_file:
+        #     data = json.load(json_file)
+        #     objetos = []
+        #     for x in data:
+        #         atributos = []
+        #         print(x)
+        #         for k in x:
+        #             print("Segundo for")
+        #             atributos.append(x[k])
+        #             print(k)
+        #         reservasGlobales.append(Reserva(atributos[0],atributos[1],atributos[2],atributos[3],atributos[4]))
+        #     for y in objetos:
+        #         print(type(y))
 
 app = Aplicacion()
