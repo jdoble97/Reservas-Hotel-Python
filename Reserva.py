@@ -1,4 +1,5 @@
 import json
+import os.path as path
 
 class Reserva:
     """
@@ -55,15 +56,12 @@ class Fichero:
     
     @staticmethod
     def cargar(listaReservas):
-        print("Estatico cargar lista")
-        with open('data.json') as json_file:
-            data = json.load(json_file)
-            objetos = []
-            for x in data:
-                atributos = []
-                print(x)
-                for k in x:
-                    atributos.append(x[k])
-                listaReservas.append(Reserva(atributos[0],atributos[1],atributos[2],atributos[3],atributos[4]))
-            for y in objetos:
-                print(type(y))
+        if path.exists("data.json"):
+            listaReservas.clear()
+            with open('data.json') as json_file:
+                data = json.load(json_file)
+                for x in data:
+                    atributos = []
+                    for k in x:
+                        atributos.append(x[k])
+                    listaReservas.append(Reserva(atributos[0],atributos[1],atributos[2],atributos[3],atributos[4]))

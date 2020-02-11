@@ -118,6 +118,7 @@ class Menu():
         insercion = ventanas.Insertar(padre, listaReservasG)
 
     def mostrarV(self, padre, listaReservasG):
+        print("mostrarV")
         padre.place_forget()
         padre.place(relwidth=0.68, relheight=1,relx=0.16,rely=0)
         frameDesechable = tk.Frame(padre, bg="orange")
@@ -125,6 +126,7 @@ class Menu():
         mostrar = ventanas.Mostrar(frameDesechable, listaReservasG)
 
     def eliminarV(self, padre, listaReservasG):
+        print("eliminarV")
         padre.place_forget()
         padre.place(relwidth=0.68, relheight=1,relx=0.16,rely=0)
         frameDesechable = tk.Frame(padre, bg="orange")
@@ -139,7 +141,20 @@ class Menu():
             messagebox.showinfo(message="Se ha exportado las reservas correctamente", title="Guardado correcto")
 
     def cargarFichero(self, listaReservasG):
-        messagebox.showinfo(message="Reservas cargadas, en caso de no haya un backup no habrá reservas que cargar", title="Guardado correcto")
         Fichero.cargar(reservasGlobales)
+        print("Intentando cargar")
+        # with open('data.json') as json_file:
+        #     data = json.load(json_file)
+        #     objetos = []
+        #     for x in data:
+        #         atributos = []
+        #         print(x)
+        #         for k in x:
+        #             print("Segundo for")
+        #             atributos.append(x[k])
+        #             print(k)
+        #         reservasGlobales.append(Reserva(atributos[0],atributos[1],atributos[2],atributos[3],atributos[4]))
+        #     for y in objetos:
+        #         print(type(y))
 
 app = Aplicacion()
